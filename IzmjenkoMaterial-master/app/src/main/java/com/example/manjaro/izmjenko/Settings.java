@@ -1,9 +1,11 @@
 package com.example.manjaro.izmjenko;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -41,8 +43,11 @@ public class Settings extends AppCompatActivity {
     String domain="";
     String shift="";
     Switch sw;
+    Switch swObavijesti;
+    Switch dark;
     TextView imePrezimeTv,ClassTv,shiftTv,domainTv;
     ArrayList<String> alProfessors=new ArrayList<>();
+    boolean showNotifications=true;
 
 
     @Override
@@ -54,14 +59,24 @@ public class Settings extends AppCompatActivity {
         ClassTv=findViewById(R.id.tvClass);
         shiftTv=findViewById(R.id.tvShift);
         domainTv=findViewById(R.id.tvDomain);
+        swObavijesti=findViewById(R.id.obavijesti_sw);
+        dark=findViewById(R.id.sw_darkmode);
 
-        BackColor();
+
 
         sharedPref = getSharedPreferences("IZMJENKO.sharedPref",Context.MODE_PRIVATE);
         editor = sharedPref.edit();
 
         domain=sharedPref.getString("IZMJENKO.domain","https://izmjenko.ddns.net");
         getProfessors();
+
+
+        boolean darkTheme=sharedPref.getBoolean("IZMJENKO.darkTheme",false);
+
+        if(darkTheme){
+            BackColor();
+            dark.setChecked(true);
+        }
 
         if(!sharedPref.contains("IZMJENKO.isProf")){
             editor.putBoolean("IZMJENKO.isProf",false);
@@ -96,9 +111,35 @@ public class Settings extends AppCompatActivity {
 
         }
 
+        showNotifications=sharedPref.getBoolean("IZMJENKO.showNotifications",true);
+        swObavijesti.setChecked(showNotifications);
+
+        swObavijesti.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    editor.putBoolean("IZMJENKO.showNotifications",true);
+
+                }else{
+                    editor.putBoolean("IZMJENKO.showNotifications",false);
+                }
+            }
+        });
+
+
 
         domainTv.setText("Domena: "+domain);
 
+        dark.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    editor.putBoolean("IZMJENKO.darkTheme",true);
+                    BackColor();
+                }else{
+                    editor.putBoolean("IZMJENKO.darkTheme",false);
+                    Reverse();
+                }
+            }
+        });
 
         sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -286,7 +327,8 @@ public class Settings extends AppCompatActivity {
     public void BackColor() {
         Button nes=findViewById(R.id.button);
         Switch prof=findViewById(R.id.switch1);
-        Switch todo=findViewById(R.id.switch2);
+        Switch todo=findViewById(R.id.obavijesti_sw);
+        Switch dark=findViewById(R.id.sw_darkmode);
         TextView imePrezimeTv,ClassTv,shiftTv,domainTv;
         imePrezimeTv=findViewById(R.id.tvImePrezime);
         ClassTv=findViewById(R.id.tvClass);
@@ -294,6 +336,7 @@ public class Settings extends AppCompatActivity {
         domainTv=findViewById(R.id.tvDomain);
 
         nes.setBackgroundColor(Color.parseColor("#303030"));
+        dark.setTextColor(Color.WHITE);
         nes.setTextColor(Color.WHITE);
         imePrezimeTv.setTextColor(Color.WHITE);
         ClassTv.setTextColor(Color.WHITE);
@@ -305,5 +348,31 @@ public class Settings extends AppCompatActivity {
         View view = this.getWindow().getDecorView();
         view.setBackgroundColor(Color.BLACK);
     }
+
+    public void Reverse() {
+        Button nes=findViewById(R.id.button);
+        Switch prof=findViewById(R.id.switch1);
+        Switch todo=findViewById(R.id.obavijesti_sw);
+        Switch dark=findViewById(R.id.sw_darkmode);
+        TextView imePrezimeTv,ClassTv,shiftTv,domainTv;
+        imePrezimeTv=findViewById(R.id.tvImePrezime);
+        ClassTv=findViewById(R.id.tvClass);
+        shiftTv=findViewById(R.id.tvShift);
+        domainTv=findViewById(R.id.tvDomain);
+
+        nes.setBackgroundResource(android.R.drawable.btn_default);
+        dark.setTextColor(Color.BLACK);
+        nes.setTextColor(Color.BLACK);
+        imePrezimeTv.setTextColor(Color.BLACK);
+        ClassTv.setTextColor(Color.BLACK);
+        shiftTv.setTextColor(Color.BLACK);
+        domainTv.setTextColor(Color.BLACK);
+        prof.setTextColor(Color.BLACK);
+        todo.setTextColor(Color.BLACK);
+
+        View view = this.getWindow().getDecorView();
+        view.setBackgroundColor(Color.WHITE);
+    }
+
 
 }

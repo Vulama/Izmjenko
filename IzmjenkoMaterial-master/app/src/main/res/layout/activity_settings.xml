@@ -85,15 +85,29 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Switch
-        android:id="@+id/switch2"
+        android:id="@+id/obavijesti_sw"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Obavijesti /TODO (trenutno ne radi nista)"
+        android:checked="true"
+        android:text="Prikazuj obavijesti o izmjenama"
         android:textAppearance="@android:style/TextAppearance.Material.Medium"
         app:layout_constraintBottom_toTopOf="@+id/tvDomain"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Switch
+        android:id="@+id/sw_darkmode"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Tamna tema"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        app:layout_constraintBottom_toTopOf="@+id/obavijesti_sw"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="navigation_view"
-    android:id="@+id/left">
+    tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_today"
             android:icon="@drawable/ic_today"
-            android:title="Danas"
-            />
+            android:title="Danas" />
         <item
             android:id="@+id/nav_tomorrow"
             android:icon="@drawable/ic_tomorrow"

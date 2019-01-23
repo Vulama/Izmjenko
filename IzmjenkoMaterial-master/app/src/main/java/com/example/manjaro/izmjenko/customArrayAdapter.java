@@ -2,6 +2,7 @@ package com.example.manjaro.izmjenko;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +12,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import dalvik.system.BaseDexClassLoader;
 
 public class customArrayAdapter extends ArrayAdapter {
     private Context context;
@@ -35,10 +34,19 @@ public class customArrayAdapter extends ArrayAdapter {
         TextView tvEndTime= (TextView) view.findViewById(R.id.end);
         TextView tvSubject= (TextView) view.findViewById(R.id.sub);
 
-        tvHeader.setTextColor(Color.WHITE);
-        tvStartTime.setTextColor(Color.WHITE);
-        tvEndTime.setTextColor(Color.WHITE);
-        tvSubject.setTextColor(Color.WHITE);
+        /*
+        SharedPreferences sharedPref;
+        sharedPref = getSharedPreferences("IZMJENKO.sharedPref",Context.MODE_PRIVATE);
+        boolean darkTheme=sharedPref.getBoolean("IZMJENKO.darkTheme",false);
+
+        if(darkTheme){
+            tvHeader.setTextColor(Color.WHITE);
+            tvStartTime.setTextColor(Color.WHITE);
+            tvEndTime.setTextColor(Color.WHITE);
+            tvSubject.setTextColor(Color.WHITE);
+        }
+        */
+
 
         tvHeader.setText(Class.header+". sat");
         tvStartTime.setText(Class.startTime);
@@ -46,9 +54,5 @@ public class customArrayAdapter extends ArrayAdapter {
         tvSubject.setText(Class.subject);
 
         return view;
-
-
     }
-
-
 }

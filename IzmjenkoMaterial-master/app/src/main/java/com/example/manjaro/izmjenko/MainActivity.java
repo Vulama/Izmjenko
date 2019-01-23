@@ -42,6 +42,12 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -74,6 +80,7 @@ public class MainActivity extends AppCompatActivity
     ArrayList<ClassInfo> alChangesInfo=new ArrayList<>();
     Toolbar toolbar;
     SharedPreferences sharedPref;
+    boolean showNotifications=true;
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -84,10 +91,13 @@ public class MainActivity extends AppCompatActivity
         getIntent().setAction("Already created");
         createNotificationChannel();
 
-        BackColor();
-
-
         sharedPref = getSharedPreferences("IZMJENKO.sharedPref",Context.MODE_PRIVATE);
+
+        boolean darkTheme=sharedPref.getBoolean("IZMJENKO.darkTheme",false);
+
+        if(darkTheme){
+            BackColor();
+        }
 
         getDate();
 
@@ -104,13 +114,31 @@ public class MainActivity extends AppCompatActivity
             Log.e("shift",shift);
         }
 
-
+       /*
         Intent alarmIntent = new Intent(this, AlarmReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
         manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         int interval = 100000;
 
         manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
+
+*/
+
+        PeriodicWorkRequest.Builder WorkBuilder =
+                new PeriodicWorkRequest.Builder(BackgroundWorker.class, 1,
+                        TimeUnit.MINUTES);
+
+        PeriodicWorkRequest myWork = WorkBuilder.build();
+        WorkManager.getInstance().enqueue(myWork);
+
+        showNotifications=sharedPref.getBoolean("IZMJENKO.showNotifications",true);
+        Log.e("NOTIFY",String.valueOf(showNotifications));
+        if(!showNotifications){
+            UUID myWorkId = myWork.getId();
+            WorkManager.getInstance().cancelWorkById(myWorkId);
+        }
+
+
 
 
 
