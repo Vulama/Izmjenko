@@ -4,12 +4,20 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,18 +42,20 @@ public class customArrayAdapter extends ArrayAdapter {
         TextView tvEndTime= (TextView) view.findViewById(R.id.end);
         TextView tvSubject= (TextView) view.findViewById(R.id.sub);
 
-        /*
-        SharedPreferences sharedPref;
-        sharedPref = getSharedPreferences("IZMJENKO.sharedPref",Context.MODE_PRIVATE);
-        boolean darkTheme=sharedPref.getBoolean("IZMJENKO.darkTheme",false);
+        String meta=Read(getContext(),"dark.txt");
 
-        if(darkTheme){
+        if(!(meta.isEmpty())){
             tvHeader.setTextColor(Color.WHITE);
             tvStartTime.setTextColor(Color.WHITE);
             tvEndTime.setTextColor(Color.WHITE);
             tvSubject.setTextColor(Color.WHITE);
+        }else{
+            tvHeader.setTextColor(Color.BLACK);
+            tvStartTime.setTextColor(Color.BLACK);
+            tvEndTime.setTextColor(Color.BLACK);
+            tvSubject.setTextColor(Color.BLACK);
         }
-        */
+
 
 
         tvHeader.setText(Class.header+". sat");
@@ -55,4 +65,34 @@ public class customArrayAdapter extends ArrayAdapter {
 
         return view;
     }
+
+    private String Read(Context context,String filename){
+
+        String ret = "";
+
+        try {
+            InputStream inputStream = context.openFileInput(filename);
+
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    stringBuilder.append(receiveString);
+                }
+
+                inputStream.close();
+                ret = stringBuilder.toString();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            Log.e("login activity", "Can not read file: " + e.toString());
+        }
+
+        return ret;
+    }
+
 }

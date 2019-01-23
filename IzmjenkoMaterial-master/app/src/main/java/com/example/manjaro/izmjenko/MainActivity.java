@@ -12,8 +12,12 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.view.InflateException;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -26,6 +30,7 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -86,14 +91,21 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        sharedPref = getSharedPreferences("IZMJENKO.sharedPref",Context.MODE_PRIVATE);
+        boolean darkTheme=sharedPref.getBoolean("IZMJENKO.darkTheme",false);
+
+        if(darkTheme){
+            setContentView(R.layout.activity_main1);
+        }else{
+            setContentView(R.layout.activity_main);
+        }
+
 
         getIntent().setAction("Already created");
         createNotificationChannel();
 
-        sharedPref = getSharedPreferences("IZMJENKO.sharedPref",Context.MODE_PRIVATE);
 
-        boolean darkTheme=sharedPref.getBoolean("IZMJENKO.darkTheme",false);
 
         if(darkTheme){
             BackColor();
@@ -245,9 +257,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        sharedPref = getSharedPreferences("IZMJENKO.sharedPref",Context.MODE_PRIVATE);
+        boolean darkTheme=sharedPref.getBoolean("IZMJENKO.darkTheme",false);
+
         getMenuInflater().inflate(R.menu.main, menu);
+
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
